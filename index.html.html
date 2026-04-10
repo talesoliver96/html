@@ -1,0 +1,1405 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Zytek Automação</title>
+  <meta name="description" content="Automação comercial, PDV, estoque, WhatsApp, balanças, impressoras, cupom fiscal e implantação completa para lojas, mercados e restaurantes." />
+  <style>
+    :root {
+      --bg: #061121;
+      --bg-2: #08192f;
+      --card: rgba(10, 25, 49, 0.78);
+      --card-strong: rgba(11, 28, 56, 0.96);
+      --stroke: rgba(105, 170, 255, 0.12);
+      --stroke-strong: rgba(105, 170, 255, 0.2);
+      --text: #edf4ff;
+      --muted: #9eb2d0;
+      --blue: #1f7cff;
+      --blue-2: #52beff;
+      --green: #10c98b;
+      --shadow: 0 22px 60px rgba(0, 0, 0, 0.42);
+      --radius: 24px;
+      --container: 1180px;
+      --header-h: 78px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top left, rgba(31,124,255,.16), transparent 30%),
+        radial-gradient(circle at 84% 8%, rgba(82,190,255,.14), transparent 20%),
+        linear-gradient(180deg, #030814 0%, #061121 42%, #07172c 100%);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: -1;
+      background-image:
+        linear-gradient(rgba(109,166,255,.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(109,166,255,.04) 1px, transparent 1px);
+      background-size: 34px 34px;
+      mask-image: radial-gradient(circle at center, black 36%, transparent 92%);
+      opacity: .42;
+    }
+
+    a { color: inherit; text-decoration: none; }
+    img { display: block; max-width: 100%; }
+    button { font: inherit; }
+
+    .container {
+      width: min(var(--container), calc(100% - 32px));
+      margin: 0 auto;
+    }
+
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      border-bottom: 1px solid rgba(116,172,255,.08);
+      background: rgba(5, 12, 24, .76);
+      backdrop-filter: blur(16px);
+    }
+
+    .nav {
+      min-height: var(--header-h);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 14px;
+      font-weight: 800;
+      letter-spacing: .04em;
+      flex-shrink: 0;
+    }
+
+    .logo-mark {
+      width: 50px;
+      height: 50px;
+      border-radius: 17px;
+      display: grid;
+      place-items: center;
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(135deg, var(--blue), var(--blue-2));
+      box-shadow: 0 0 0 1px rgba(255,255,255,.08), 0 0 32px rgba(31,124,255,.34);
+    }
+
+    .logo-mark::before,
+    .logo-mark::after {
+      content: "";
+      position: absolute;
+      width: 90px;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,.55), transparent);
+      transform: rotate(-24deg);
+      opacity: .42;
+    }
+
+    .logo-mark::before { top: 12px; left: -18px; }
+    .logo-mark::after { bottom: 12px; right: -18px; opacity: .26; }
+
+    .logo-mark span {
+      color: white;
+      font-size: 1.48rem;
+      font-weight: 900;
+      transform: skewX(-12deg);
+      text-shadow: 0 3px 12px rgba(0,0,0,.35);
+    }
+
+    .brand-text strong {
+      display: block;
+      line-height: 1;
+      font-size: 1.1rem;
+    }
+
+    .brand-text small {
+      display: block;
+      margin-top: 4px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: .18em;
+      font-size: .68rem;
+    }
+
+    .nav-links,
+    .cta-group {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .nav-links a {
+      padding: 10px 14px;
+      border-radius: 999px;
+      color: var(--muted);
+      transition: .2s ease;
+    }
+
+    .nav-links a.active,
+    .nav-links a:hover {
+      color: var(--text);
+      background: rgba(31,124,255,.12);
+    }
+
+    .btn {
+      min-height: 48px;
+      padding: 0 18px;
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid transparent;
+      cursor: pointer;
+      font-weight: 700;
+      transition: transform .2s ease, box-shadow .2s ease, background .2s ease, border-color .2s ease;
+      text-align: center;
+    }
+
+    .btn:hover { transform: translateY(-2px); }
+
+    .btn-primary {
+      color: white;
+      background: linear-gradient(135deg, var(--blue), var(--blue-2));
+      box-shadow: 0 12px 34px rgba(31,124,255,.3);
+    }
+
+    .btn-outline {
+      color: var(--text);
+      background: rgba(255,255,255,.03);
+      border-color: rgba(116,172,255,.14);
+    }
+
+    .mobile-toggle {
+      display: none;
+      width: 48px;
+      height: 48px;
+      border-radius: 16px;
+      border: 1px solid rgba(116,172,255,.14);
+      background: rgba(255,255,255,.03);
+      color: white;
+      cursor: pointer;
+    }
+
+    section {
+      padding: 88px 0;
+      scroll-margin-top: calc(var(--header-h) + 16px);
+    }
+
+    .hero {
+      padding-top: 64px;
+      overflow: clip;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.08fr .92fr;
+      gap: 28px;
+      align-items: center;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      min-height: 40px;
+      padding: 0 14px;
+      border-radius: 999px;
+      color: #bed7ff;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      font-size: .84rem;
+      background: rgba(31,124,255,.1);
+      border: 1px solid rgba(116,172,255,.12);
+      margin-bottom: 18px;
+    }
+
+    .eyebrow::before {
+      content: "";
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: linear-gradient(180deg, var(--blue-2), var(--blue));
+      box-shadow: 0 0 16px rgba(82,190,255,.4);
+    }
+
+    h1, h2, h3, p { margin: 0; }
+
+    .hero h1 {
+      font-size: clamp(2.45rem, 5vw, 4.8rem);
+      line-height: .97;
+      letter-spacing: -.05em;
+      max-width: 12ch;
+    }
+
+    .hero h1 .highlight {
+      background: linear-gradient(135deg, #fff, #a4d6ff 64%, #42b0ff);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .hero p {
+      margin-top: 18px;
+      color: var(--muted);
+      line-height: 1.74;
+      font-size: 1.06rem;
+      max-width: 64ch;
+    }
+
+    .hero-actions,
+    .hero-points,
+    .stats,
+    .section-heading,
+    .footer-grid,
+    .catalog-filters,
+    .slider-controls,
+    .whatsapp-box {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+    }
+
+    .hero-actions { margin-top: 28px; }
+    .hero-points { margin-top: 26px; }
+
+    .chip,
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      min-height: 34px;
+      padding: 0 12px;
+      border-radius: 999px;
+      font-size: .86rem;
+      border: 1px solid rgba(116,172,255,.12);
+      background: rgba(255,255,255,.03);
+      color: #d3e2fb;
+      font-weight: 600;
+    }
+
+    .badge.special {
+      background: rgba(16,201,139,.12);
+      border-color: rgba(16,201,139,.24);
+      color: white;
+    }
+
+    .stats {
+      margin-top: 24px;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .mini-card,
+    .hero-card,
+    .trust-card,
+    .service-card,
+    .product-card,
+    .about-card,
+    .contact-card {
+      border-radius: var(--radius);
+      border: 1px solid var(--stroke);
+      background: linear-gradient(180deg, rgba(10, 24, 47, .86), rgba(8, 18, 37, .96));
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .mini-card {
+      padding: 18px;
+    }
+
+    .mini-card strong {
+      display: block;
+      font-size: 1.45rem;
+      margin-bottom: 8px;
+      letter-spacing: -.03em;
+    }
+
+    .muted,
+    .section-subtitle,
+    .footer-note,
+    .product-meta { color: var(--muted); }
+
+    .hero-card { padding: 24px; }
+
+    .hero-card::before,
+    .service-card::after,
+    .product-card::after,
+    .about-card::after,
+    .contact-card::after {
+      content: "";
+      position: absolute;
+      inset: auto -40px -50px auto;
+      width: 150px;
+      height: 150px;
+      background: radial-gradient(circle, rgba(31,124,255,.24), transparent 70%);
+      pointer-events: none;
+    }
+
+    .device-window {
+      border-radius: 22px;
+      background: linear-gradient(180deg, rgba(7,16,32,.96), rgba(13,29,57,.92));
+      border: 1px solid rgba(116,172,255,.12);
+      overflow: hidden;
+    }
+
+    .device-topbar {
+      display: flex;
+      gap: 8px;
+      padding: 12px 14px;
+      background: rgba(255,255,255,.03);
+      border-bottom: 1px solid rgba(116,172,255,.08);
+    }
+
+    .device-topbar i {
+      display: block;
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.16);
+    }
+
+    .dashboard {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+      padding: 18px;
+    }
+
+    .panel {
+      min-height: 118px;
+      padding: 16px;
+      border-radius: 20px;
+      border: 1px solid rgba(116,172,255,.09);
+      background: rgba(255,255,255,.03);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .panel .label { color: var(--muted); }
+
+    .panel strong {
+      font-size: 1.2rem;
+      letter-spacing: -.03em;
+    }
+
+    .bar {
+      width: 100%;
+      height: 8px;
+      border-radius: 999px;
+      overflow: hidden;
+      background: rgba(255,255,255,.05);
+    }
+
+    .bar > span {
+      display: block;
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--blue), var(--blue-2));
+      box-shadow: 0 0 16px rgba(82,190,255,.36);
+      animation: pulseBar 4s ease-in-out infinite alternate;
+    }
+
+    @keyframes pulseBar {
+      from { filter: brightness(.94); }
+      to { filter: brightness(1.1); }
+    }
+
+    .section-heading {
+      align-items: end;
+      justify-content: space-between;
+      margin-bottom: 28px;
+    }
+
+    .section-title {
+      font-size: clamp(1.9rem, 3vw, 3rem);
+      letter-spacing: -.04em;
+      max-width: 13ch;
+    }
+
+    .section-subtitle {
+      max-width: 62ch;
+      line-height: 1.72;
+      font-size: 1rem;
+    }
+
+    .trust-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .trust-card {
+      padding: 22px;
+    }
+
+    .trust-card strong {
+      display: block;
+      font-size: 1.18rem;
+      margin-bottom: 8px;
+    }
+
+    .slider-wrap {
+      position: relative;
+    }
+
+    .slider {
+      display: flex;
+      gap: 18px;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      scroll-behavior: smooth;
+      padding: 4px 2px 10px;
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+      cursor: grab;
+      user-select: none;
+    }
+
+    .slider::-webkit-scrollbar { display: none; }
+    .slider.dragging { cursor: grabbing; scroll-behavior: auto; }
+
+    .slide {
+      flex: 0 0 calc((100% - 36px) / 3);
+      min-width: 320px;
+      scroll-snap-align: start;
+    }
+
+    .service-card,
+    .product-card,
+    .about-card,
+    .contact-card {
+      padding: 24px;
+      min-height: 100%;
+    }
+
+    .icon {
+      width: 56px;
+      height: 56px;
+      border-radius: 18px;
+      display: grid;
+      place-items: center;
+      font-size: 1.45rem;
+      background: linear-gradient(135deg, rgba(31,124,255,.2), rgba(82,190,255,.16));
+      border: 1px solid rgba(116,172,255,.14);
+      margin-bottom: 16px;
+      box-shadow: 0 0 24px rgba(31,124,255,.16);
+    }
+
+    .service-card h3,
+    .product-card h3,
+    .about-card h3,
+    .contact-card h3 {
+      font-size: 1.2rem;
+      letter-spacing: -.03em;
+      margin-bottom: 10px;
+    }
+
+    .service-card p,
+    .product-card p,
+    .about-card p,
+    .contact-card p {
+      color: var(--muted);
+      line-height: 1.72;
+    }
+
+    .service-list,
+    .product-specs,
+    .about-list {
+      list-style: none;
+      padding: 0;
+      margin: 18px 0 0;
+      display: grid;
+      gap: 10px;
+    }
+
+    .service-list li,
+    .product-specs li,
+    .about-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      line-height: 1.58;
+      color: #dbe8ff;
+    }
+
+    .service-list li::before,
+    .product-specs li::before,
+    .about-list li::before {
+      content: "";
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      margin-top: 8px;
+      background: linear-gradient(180deg, var(--blue-2), var(--blue));
+      box-shadow: 0 0 16px rgba(82,190,255,.36);
+      flex: 0 0 auto;
+    }
+
+    .slider-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 18px;
+      flex-wrap: wrap;
+    }
+
+    .slider-controls {
+      align-items: center;
+      gap: 10px;
+    }
+
+    .slider-btn {
+      width: 46px;
+      height: 46px;
+      border-radius: 999px;
+      border: 1px solid rgba(116,172,255,.14);
+      background: rgba(255,255,255,.03);
+      color: white;
+      cursor: pointer;
+      transition: .2s ease;
+      font-size: 1.1rem;
+    }
+
+    .slider-btn:hover {
+      background: rgba(31,124,255,.14);
+      border-color: rgba(31,124,255,.28);
+    }
+
+    .catalog-filters {
+      margin-bottom: 16px;
+    }
+
+    .filter-btn {
+      min-height: 44px;
+      padding: 0 15px;
+      border-radius: 999px;
+      border: 1px solid rgba(116,172,255,.14);
+      background: rgba(255,255,255,.03);
+      color: #d3e2fb;
+      cursor: pointer;
+      font-weight: 600;
+      transition: .2s ease;
+    }
+
+    .filter-btn.active,
+    .filter-btn:hover {
+      background: rgba(31,124,255,.16);
+      border-color: rgba(31,124,255,.32);
+      color: white;
+    }
+
+    .product-card {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .product-thumb {
+      height: 180px;
+      border-radius: 18px;
+      border: 1px solid rgba(116,172,255,.1);
+      background:
+        radial-gradient(circle at 28% 18%, rgba(82,190,255,.2), transparent 25%),
+        linear-gradient(160deg, rgba(17, 34, 65, .96), rgba(6, 14, 28, .96));
+      display: grid;
+      place-items: center;
+      font-size: 2.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .product-thumb::before {
+      content: "";
+      position: absolute;
+      inset: auto -24px -24px auto;
+      width: 118px;
+      height: 118px;
+      background: radial-gradient(circle, rgba(31,124,255,.25), transparent 70%);
+    }
+
+    .badge-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .price {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 16px;
+      margin-top: auto;
+    }
+
+    .price strong {
+      display: block;
+      font-size: 1.14rem;
+      letter-spacing: -.03em;
+    }
+
+    .price span { color: var(--muted); font-size: .92rem; }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1.08fr .92fr;
+      gap: 18px;
+      align-items: start;
+    }
+
+    .about-card.highlight {
+      background: linear-gradient(180deg, rgba(10, 28, 56, .96), rgba(7, 18, 37, .98));
+    }
+
+    .contact-stack {
+      display: grid;
+      gap: 18px;
+    }
+
+    .whatsapp-box {
+      margin-top: 26px;
+      align-items: center;
+      justify-content: space-between;
+      border-radius: 26px;
+      padding: 24px;
+      border: 1px solid rgba(116,172,255,.12);
+      background: linear-gradient(135deg, rgba(10, 24, 47, .96), rgba(7, 18, 37, .98));
+      box-shadow: var(--shadow);
+    }
+
+    .footer {
+      padding: 28px 0 38px;
+      border-top: 1px solid rgba(116,172,255,.08);
+      background: rgba(4, 10, 20, .55);
+    }
+
+    .footer-grid {
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .footer-note {
+      margin-top: 14px;
+      max-width: 70ch;
+      line-height: 1.7;
+      font-size: .94rem;
+    }
+
+    .floating-wa {
+      position: fixed;
+      right: 18px;
+      bottom: 18px;
+      z-index: 1100;
+      width: 60px;
+      height: 60px;
+      border-radius: 999px;
+      display: grid;
+      place-items: center;
+      color: white;
+      font-size: 1.42rem;
+      background: linear-gradient(135deg, #21c966, #10ad55);
+      box-shadow: 0 16px 36px rgba(17,201,108,.32);
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity .7s ease, transform .7s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @media (max-width: 1080px) {
+      .hero-grid,
+      .about-grid,
+      .trust-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .slide {
+        flex-basis: calc((100% - 18px) / 2);
+      }
+    }
+
+    @media (max-width: 860px) {
+      .mobile-toggle {
+        display: inline-grid;
+        place-items: center;
+      }
+
+      .nav {
+        flex-wrap: wrap;
+      }
+
+      .nav-links,
+      .cta-group {
+        display: none;
+        width: 100%;
+      }
+
+      .nav.open {
+        align-items: flex-start;
+        padding: 14px 0 18px;
+      }
+
+      .nav.open .nav-links,
+      .nav.open .cta-group {
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .nav-links a,
+      .cta-group .btn {
+        width: 100%;
+      }
+
+      .stats,
+      .dashboard {
+        grid-template-columns: 1fr;
+      }
+
+      .slide {
+        flex-basis: 88%;
+        min-width: 280px;
+      }
+
+      section { padding: 74px 0; }
+      .hero { padding-top: 54px; }
+    }
+
+    @media (max-width: 540px) {
+      .container { width: min(var(--container), calc(100% - 20px)); }
+      .hero h1 { max-width: 100%; }
+      .hero-actions { flex-direction: column; }
+      .btn { width: 100%; }
+      .whatsapp-box { padding: 20px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container nav" id="navWrap">
+      <a class="brand" href="#home" aria-label="Zytek Automação">
+        <span class="logo-mark"><span>Z</span></span>
+        <span class="brand-text">
+          <strong>ZYTEK</strong>
+          <small>Automação</small>
+        </span>
+      </a>
+
+      <nav class="nav-links" aria-label="Principal">
+        <a href="#home" class="active">Home</a>
+        <a href="#servicos">Serviços</a>
+        <a href="#produtos">Produtos</a>
+        <a href="#sobre">Sobre</a>
+      </nav>
+
+      <div class="cta-group">
+        <a class="btn btn-outline" href="#produtos">Ver catálogo</a>
+        <a class="btn btn-primary wa-link" href="#" data-message="Olá! Quero falar com a Zytek sobre automação comercial para o meu negócio.">Falar no WhatsApp</a>
+      </div>
+
+      <button class="mobile-toggle" id="mobileToggle" aria-label="Abrir menu">☰</button>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero" id="home">
+      <div class="container hero-grid">
+        <div class="reveal visible">
+          <span class="eyebrow">Automação inteligente para vender melhor</span>
+          <h1><span class="highlight">Tecnologia completa</span> para o caixa, estoque, atendimento e operação do seu negócio.</h1>
+          <p>
+            A Zytek Automação implanta ambientes comerciais com foco em agilidade, organização e suporte prático. Estruturamos PDV, emissão de cupom fiscal, estoque, balanças, impressoras, leitores, gavetas, computadores, restaurante, delivery e também automação de WhatsApp com atendimento 100% personalizado.
+          </p>
+
+          <div class="hero-actions">
+            <a class="btn btn-primary wa-link" href="#" data-message="Olá! Quero solicitar uma instalação de automação comercial.">Solicitar instalação</a>
+            <a class="btn btn-outline wa-link" href="#" data-message="Olá! Quero conhecer os planos de mensalidade e suporte da Zytek.">Ver mensalidades</a>
+          </div>
+
+          <div class="hero-points">
+            <span class="chip">PDV + estoque</span>
+            <span class="chip">Restaurante e delivery</span>
+            <span class="chip">Cupom fiscal</span>
+            <span class="chip">WhatsApp automatizado</span>
+          </div>
+
+          <div class="stats">
+            <div class="mini-card">
+              <strong>Venda com controle</strong>
+              <span class="muted">Implantação pensada para a rotina real de loja, mercado, restaurante e atendimento digital.</span>
+            </div>
+            <div class="mini-card">
+              <strong>Suporte rápido</strong>
+              <span class="muted">Atendimento direto no WhatsApp para instalação, orçamento, expansão e acompanhamento técnico.</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="hero-card reveal">
+          <div class="device-window">
+            <div class="device-topbar"><i></i><i></i><i></i></div>
+            <div class="dashboard">
+              <div class="panel">
+                <span class="label">Caixa / PDV</span>
+                <strong>Operação estável</strong>
+                <div class="bar"><span style="width:82%"></span></div>
+              </div>
+              <div class="panel">
+                <span class="label">Estoque</span>
+                <strong>Entrada e saída</strong>
+                <div class="bar"><span style="width:74%"></span></div>
+              </div>
+              <div class="panel">
+                <span class="label">Fiscal</span>
+                <strong>Cupom e nota</strong>
+                <div class="bar"><span style="width:88%"></span></div>
+              </div>
+              <div class="panel">
+                <span class="label">WhatsApp</span>
+                <strong>Atendimento customizado</strong>
+                <div class="bar"><span style="width:79%"></span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section style="padding-top: 0;">
+      <div class="container">
+        <div class="trust-grid">
+          <article class="trust-card reveal">
+            <strong>Implantação completa</strong>
+            <p class="muted">Computador, software, periféricos e configuração operacional no mesmo projeto.</p>
+          </article>
+          <article class="trust-card reveal">
+            <strong>Mensalidade recorrente</strong>
+            <p class="muted">Planos para suporte, ajustes, acompanhamento e evolução do ambiente.</p>
+          </article>
+          <article class="trust-card reveal">
+            <strong>Comércio e food service</strong>
+            <p class="muted">Soluções para varejo, mercados, lojas, delivery, restaurantes e balcão.</p>
+          </article>
+          <article class="trust-card reveal">
+            <strong>WhatsApp automatizado</strong>
+            <p class="muted">Fluxos personalizados para vendas, atendimento, triagem e suporte do cliente.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="servicos">
+      <div class="container">
+        <div class="section-heading reveal">
+          <div>
+            <span class="eyebrow">Serviços</span>
+            <h2 class="section-title">Implantação, suporte e automação para diferentes tipos de negócio.</h2>
+          </div>
+          <p class="section-subtitle">Arraste para o lado para ver todos os serviços. Cada solução foi organizada para atender a operação física e digital do cliente com implantação consultiva.</p>
+        </div>
+
+        <div class="slider-header reveal">
+          <div class="slider-controls">
+            <button class="slider-btn" type="button" data-slider-target="servicesSlider" data-dir="prev">←</button>
+            <button class="slider-btn" type="button" data-slider-target="servicesSlider" data-dir="next">→</button>
+          </div>
+        </div>
+
+        <div class="slider-wrap reveal">
+          <div class="slider" id="servicesSlider">
+            <div class="slide">
+              <article class="service-card">
+                <div class="icon">💻</div>
+                <h3>Implantação de PDV e sistema</h3>
+                <p>Instalação e configuração do computador, sistema de caixa, cadastro inicial, estoque, usuários e rotina operacional.</p>
+                <ul class="service-list">
+                  <li>Configuração de caixa e vendas</li>
+                  <li>Organização de produtos e estoque</li>
+                  <li>Treinamento básico da equipe</li>
+                </ul>
+              </article>
+            </div>
+
+            <div class="slide">
+              <article class="service-card">
+                <div class="icon">🧾</div>
+                <h3>Fiscal e emissão de cupons</h3>
+                <p>Preparação do ambiente para emissão de cupom fiscal e integração com impressoras e dispositivos homologados.</p>
+                <ul class="service-list">
+                  <li>Emissão de cupom e comprovantes</li>
+                  <li>Configuração de impressoras térmicas</li>
+                  <li>Ajustes operacionais do ambiente</li>
+                </ul>
+              </article>
+            </div>
+
+            <div class="slide">
+              <article class="service-card">
+                <div class="icon">🍽️</div>
+                <h3>Automação para restaurante</h3>
+                <p>Soluções para balcão, salão, delivery e cozinha, com foco em atendimento ágil e controle operacional.</p>
+                <ul class="service-list">
+                  <li>Frente de caixa e balcão</li>
+                  <li>Fluxo de pedidos e comandas</li>
+                  <li>Suporte para expansão do negócio</li>
+                </ul>
+              </article>
+            </div>
+
+            <div class="slide">
+              <article class="service-card">
+                <div class="icon">⚙️</div>
+                <h3>Periféricos e integração</h3>
+                <p>Ligamos todo o ecossistema do caixa: leitores, gavetas, impressoras, balanças, teclado PDV e acessórios.</p>
+                <ul class="service-list">
+                  <li>Integração de hardware</li>
+                  <li>Substituição e upgrade de equipamentos</li>
+                  <li>Padronização de bancada</li>
+                </ul>
+              </article>
+            </div>
+
+            <div class="slide">
+              <article class="service-card">
+                <div class="icon">🏪</div>
+                <h3>Mercados e varejo</h3>
+                <p>Estrutura tecnológica para mercados, mercearias, conveniências, lojas e operações com grande volume de itens.</p>
+                <ul class="service-list">
+                  <li>Balanças e etiquetagem</li>
+                  <li>Controle de estoque e preço</li>
+                  <li>Caixa rápido e organizado</li>
+                </ul>
+              </article>
+            </div>
+
+            <div class="slide">
+              <article class="service-card">
+                <div class="icon">🤖</div>
+                <h3>Automação de WhatsApp</h3>
+                <p>Bot de atendimento 100% customizado para a rotina do cliente, com fluxos sob medida para vendas, triagem, suporte e captação de pedidos.</p>
+                <ul class="service-list">
+                  <li>Fluxo personalizado para cada negócio</li>
+                  <li>Atendimento automático e direcionamento</li>
+                  <li>Implantação conforme necessidade operacional</li>
+                </ul>
+              </article>
+            </div>
+
+            <div class="slide">
+              <article class="service-card">
+                <div class="icon">📲</div>
+                <h3>Mensalidade e suporte</h3>
+                <p>Planos mensais para acompanhamento técnico, correções, ajustes e orientações sobre o ambiente implantado.</p>
+                <ul class="service-list">
+                  <li>Atendimento via WhatsApp</li>
+                  <li>Suporte remoto quando aplicável</li>
+                  <li>Acompanhamento contínuo</li>
+                </ul>
+              </article>
+            </div>
+          </div>
+        </div>
+
+        <div class="whatsapp-box reveal">
+          <div>
+            <span class="eyebrow">Automação de WhatsApp</span>
+            <h3>Atendimento inteligente, vendas e triagem no mesmo fluxo</h3>
+            <p class="muted" style="margin-top:10px; max-width: 64ch;">Desenvolvemos bots personalizados para o seu negócio, com respostas automáticas, menus, captação de leads, envio de informações, pedidos e direcionamento de atendimento humano quando necessário.</p>
+          </div>
+          <a class="btn btn-primary wa-link" href="#" data-message="Olá! Quero um projeto de automação de WhatsApp para o meu negócio.">Solicitar projeto</a>
+        </div>
+      </div>
+    </section>
+
+    <section id="produtos">
+      <div class="container">
+        <div class="section-heading reveal">
+          <div>
+            <span class="eyebrow">Produtos</span>
+            <h2 class="section-title">Catálogo sob encomenda para montar o ambiente ideal.</h2>
+          </div>
+          <p class="section-subtitle">Arraste para o lado para navegar. Os itens foram organizados entre equipamentos físicos e soluções sob demanda, incluindo automação de WhatsApp.</p>
+        </div>
+
+        <div class="catalog-filters reveal">
+          <button class="filter-btn active" data-filter="all">Todos</button>
+          <button class="filter-btn" data-filter="pdv">PDV</button>
+          <button class="filter-btn" data-filter="impressao">Impressão</button>
+          <button class="filter-btn" data-filter="leitura">Leitura</button>
+          <button class="filter-btn" data-filter="balanca">Balanças</button>
+          <button class="filter-btn" data-filter="fiscal">Fiscal</button>
+          <button class="filter-btn" data-filter="automacao">Automação</button>
+        </div>
+
+        <div class="slider-header reveal">
+          <div class="slider-controls">
+            <button class="slider-btn" type="button" data-slider-target="productsSlider" data-dir="prev">←</button>
+            <button class="slider-btn" type="button" data-slider-target="productsSlider" data-dir="next">→</button>
+          </div>
+        </div>
+
+        <div class="slider-wrap reveal">
+          <div class="slider" id="productsSlider">
+            <div class="slide product-slide" data-category="pdv">
+              <article class="product-card">
+                <div class="product-thumb">🖥️</div>
+                <div class="badge-row">
+                  <span class="badge special">Sob encomenda</span>
+                  <span class="badge">PDV</span>
+                </div>
+                <h3>Computador / Terminal de Caixa</h3>
+                <p>Montagem do posto de caixa para operação estável, com indicação conforme volume de vendas e periféricos.</p>
+                <ul class="product-specs">
+                  <li>Configuração sugerida para comércio</li>
+                  <li>Compatível com sistema e periféricos</li>
+                  <li>Instalação opcional no local</li>
+                </ul>
+                <div class="price">
+                  <div>
+                    <strong>Projeto sob consulta</strong>
+                    <span>Valor conforme estrutura</span>
+                  </div>
+                  <a class="btn btn-primary wa-link" href="#" data-message="Olá! Quero encomendar um computador/terminal de caixa para automação comercial.">Encomendar</a>
+                </div>
+              </article>
+            </div>
+
+            <div class="slide product-slide" data-category="impressao fiscal">
+              <article class="product-card">
+                <div class="product-thumb">🧾</div>
+                <div class="badge-row">
+                  <span class="badge special">Sob encomenda</span>
+                  <span class="badge">Impressão</span>
+                </div>
+                <h3>Impressora térmica de cupom</h3>
+                <p>Equipamento para emissão de cupons e comprovantes, com integração ao caixa e configuração no ambiente.</p>
+                <ul class="product-specs">
+                  <li>Alta velocidade de impressão</li>
+                  <li>Integração com gaveta e sistema</li>
+                  <li>Instalação e testes inclusos sob projeto</li>
+                </ul>
+                <div class="price">
+                  <div>
+                    <strong>Sob consulta</strong>
+                    <span>Modelo indicado por operação</span>
+                  </div>
+                  <a class="btn btn-primary wa-link" href="#" data-message="Olá! Quero encomendar uma impressora térmica para meu caixa.">Encomendar</a>
+                </div>
+              </article>
+            </div>
+
+            <div class="slide product-slide" data-category="leitura">
+              <article class="product-card">
+                <div class="product-thumb">🔎</div>
+                <div class="badge-row">
+                  <span class="badge special">Sob encomenda</span>
+                  <span class="badge">Leitura</span>
+                </div>
+                <h3>Leitor de código de barras</h3>
+                <p>Leitura ágil para varejo, conveniência e restaurante, com sugestão conforme bancada e fluxo de atendimento.</p>
+                <ul class="product-specs">
+                  <li>Modelos com fio e sem fio</li>
+                  <li>Integração com PDV</li>
+                  <li>Suporte para cadastro e testes</li>
+                </ul>
+                <div class="price">
+                  <div>
+                    <strong>Sob consulta</strong>
+                    <span>Varia por modelo</span>
+                  </div>
+                  <a class="btn btn-primary wa-link" href="#" data-message="Olá! Quero encomendar um leitor de código de barras.">Encomendar</a>
+                </div>
+              </article>
+            </div>
+
+            <div class="slide product-slide" data-category="pdv">
+              <article class="product-card">
+                <div class="product-thumb">💵</div>
+                <div class="badge-row">
+                  <span class="badge special">Sob encomenda</span>
+                  <span class="badge">PDV</span>
+                </div>
+                <h3>Gaveta de dinheiro</h3>
+                <p>Gavetas para integração com impressora e bancada de caixa, com opções adequadas ao espaço e à rotina do cliente.</p>
+                <ul class="product-specs">
+                  <li>Abertura integrada</li>
+                  <li>Modelos compactos e robustos</li>
+                  <li>Indicação conforme estação de caixa</li>
+                </ul>
+                <div class="price">
+                  <div>
+                    <strong>Sob consulta</strong>
+                    <span>Modelos por projeto</span>
+                  </div>
+                  <a class="btn btn-primary wa-link" href="#" data-message="Olá! Quero encomendar uma gaveta de dinheiro para meu PDV.">Encomendar</a>
+                </div>
+              </article>
+            </div>
+
+            <div class="slide product-slide" data-category="balanca">
+              <article class="product-card">
+                <div class="product-thumb">⚖️</div>
+                <div class="badge-row">
+                  <span class="badge special">Sob encomenda</span>
+                  <span class="badge">Balanças</span>
+                </div>
+                <h3>Balança comercial</h3>
+                <p>Indicação para mercados, hortifrúti, açougues e operações com pesagem, incluindo integração ao atendimento.</p>
+                <ul class="product-specs">
+                  <li>Pesagem para balcão e checkout</li>
+                  <li>Aplicação conforme segmento</li>
+                  <li>Suporte para implantação</li>
+                </ul>
+                <div class="price">
+                  <div>
+                    <strong>Sob consulta</strong>
+                    <span>Conforme capacidade e uso</span>
+                  </div>
+                  <a class="btn btn-primary wa-link" href="#" data-message="Olá! Quero encomendar uma balança comercial para meu negócio.">Encomendar</a>
+                </div>
+              </article>
+            </div>
+
+            <div class="slide product-slide" data-category="fiscal">
+              <article class="product-card">
+                <div class="product-thumb">🧷</div>
+                <div class="badge-row">
+                  <span class="badge special">Sob encomenda</span>
+                  <span class="badge">Fiscal</span>
+                </div>
+                <h3>Solução fiscal e acessórios</h3>
+                <p>Itens e configurações ligados ao ambiente fiscal da operação, conforme exigência e modelo de atendimento do cliente.</p>
+                <ul class="product-specs">
+                  <li>Projeto conforme necessidade</li>
+                  <li>Integração com software e impressora</li>
+                  <li>Suporte na implantação</li>
+                </ul>
+                <div class="price">
+                  <div>
+                    <strong>Consultivo</strong>
+                    <span>Definido por cenário</span>
+                  </div>
+                  <a class="btn btn-primary wa-link" href="#" data-message="Olá! Quero falar sobre solução fiscal para meu ambiente comercial.">Encomendar</a>
+                </div>
+              </article>
+            </div>
+
+            <div class="slide product-slide" data-category="automacao">
+              <article class="product-card">
+                <div class="product-thumb">🤖</div>
+                <div class="badge-row">
+                  <span class="badge special">Sob encomenda</span>
+                  <span class="badge">Automação</span>
+                </div>
+                <h3>Automação de WhatsApp</h3>
+                <p>Bot de atendimento personalizado para vendas, suporte, triagem e captação de pedidos, configurado conforme o fluxo e a necessidade do cliente.</p>
+                <ul class="product-specs">
+                  <li>Projeto 100% customizado</li>
+                  <li>Fluxos de atendimento sob medida</li>
+                  <li>Implantação e ajustes por demanda</li>
+                </ul>
+                <div class="price">
+                  <div>
+                    <strong>Sob consulta</strong>
+                    <span>Escopo definido por projeto</span>
+                  </div>
+                  <a class="btn btn-primary wa-link" href="#" data-message="Olá! Quero falar sobre a automação de WhatsApp personalizada da Zytek.">Encomendar</a>
+                </div>
+              </article>
+            </div>
+          </div>
+        </div>
+
+        <div class="whatsapp-box reveal">
+          <div>
+            <span class="eyebrow">Atendimento comercial</span>
+            <h3>Quer uma indicação rápida do equipamento ou da solução ideal?</h3>
+            <p class="muted" style="margin-top:10px; max-width: 62ch;">Mande sua necessidade no WhatsApp e receba uma proposta para implantação, compra sob encomenda, automação de atendimento ou plano mensal de suporte.</p>
+          </div>
+          <a class="btn btn-primary wa-link" href="#" data-message="Olá! Quero montar um orçamento completo de automação comercial com a Zytek.">Solicitar orçamento</a>
+        </div>
+      </div>
+    </section>
+
+    <section id="sobre">
+      <div class="container about-grid">
+        <article class="about-card highlight reveal">
+          <span class="eyebrow">Sobre a Zytek</span>
+          <h2 class="section-title" style="max-width: 100%;">Tecnologia aplicada para organizar o negócio, acelerar o atendimento e profissionalizar a operação.</h2>
+          <p style="margin-top: 18px;">A Zytek Automação nasceu com foco em implantação prática para o comércio real. A proposta é simplificar a operação do cliente com um ambiente tecnológico integrado, do computador ao cupom fiscal, passando por estoque, atendimento, periféricos e automação de WhatsApp para canais digitais.</p>
+          <ul class="about-list">
+            <li>Projeto para lojas, mercados, conveniências e restaurantes</li>
+            <li>Atendimento comercial e técnico com comunicação direta</li>
+            <li>Estrutura pensada para vender, controlar e crescer</li>
+          </ul>
+        </article>
+
+        <div class="contact-stack">
+          <article class="contact-card reveal">
+            <div class="icon">📍</div>
+            <h3>Atuação sob demanda</h3>
+            <p>Atendimento comercial para implantação, venda de equipamentos, automações e acompanhamento técnico do ambiente instalado.</p>
+          </article>
+          <article class="contact-card reveal">
+            <div class="icon">💬</div>
+            <h3>WhatsApp como canal principal</h3>
+            <p>Canal rápido para orçamentos, pedidos sob encomenda, suporte, alinhamento de instalação e automações personalizadas.</p>
+          </article>
+          <article class="contact-card reveal">
+            <div class="icon">🚀</div>
+            <h3>Foco em resultado</h3>
+            <p>Mais controle na operação, atendimento mais ágil e uma estrutura pronta para o crescimento físico e digital do cliente.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-grid">
+      <div>
+        <a class="brand" href="#home" aria-label="Zytek Automação">
+          <span class="logo-mark"><span>Z</span></span>
+          <span class="brand-text">
+            <strong>ZYTEK</strong>
+            <small>Automação</small>
+          </span>
+        </a>
+        <p class="footer-note">Automação inteligente para impulsionar seu negócio. Catálogo sob encomenda, implantação comercial, automação de WhatsApp e atendimento via WhatsApp.</p>
+      </div>
+
+      <div class="cta-group" style="display:flex;">
+        <a class="btn btn-outline" href="#servicos">Serviços</a>
+        <a class="btn btn-primary wa-link" href="#" data-message="Olá! Quero falar com a Zytek Automação.">Chamar no WhatsApp</a>
+      </div>
+    </div>
+  </footer>
+
+  <a class="floating-wa wa-link" href="#" aria-label="WhatsApp" data-message="Olá! Vim pelo site da Zytek Automação e quero um orçamento.">✆</a>
+
+  <script>
+    const whatsappNumber = '5500000000000';
+
+    document.querySelectorAll('.wa-link').forEach(link => {
+      link.addEventListener('click', event => {
+        event.preventDefault();
+        const message = encodeURIComponent(link.dataset.message || 'Olá! Quero falar com a Zytek Automação.');
+        window.open(`https://wa.me/${whatsappNumber}?text=${message}`, '_blank');
+      });
+    });
+
+    const mobileToggle = document.getElementById('mobileToggle');
+    const navWrap = document.getElementById('navWrap');
+    mobileToggle?.addEventListener('click', () => navWrap.classList.toggle('open'));
+    document.querySelectorAll('.nav-links a').forEach(anchor => {
+      anchor.addEventListener('click', () => navWrap.classList.remove('open'));
+    });
+
+    const sections = [...document.querySelectorAll('main section[id]')];
+    const navLinks = [...document.querySelectorAll('.nav-links a')];
+    const setActiveLink = () => {
+      const scrollY = window.scrollY + 120;
+      let current = sections[0]?.id || 'home';
+      sections.forEach(section => {
+        if (scrollY >= section.offsetTop) current = section.id;
+      });
+      navLinks.forEach(link => {
+        link.classList.toggle('active', link.getAttribute('href') === `#${current}`);
+      });
+    };
+    window.addEventListener('scroll', setActiveLink);
+    setActiveLink();
+
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) entry.target.classList.add('visible');
+      });
+    }, { threshold: .12 });
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+    document.querySelectorAll('[data-slider-target]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const target = document.getElementById(btn.dataset.sliderTarget);
+        if (!target) return;
+        const firstSlide = target.querySelector('.slide:not([style*="display: none"])') || target.querySelector('.slide');
+        const gap = 18;
+        const amount = firstSlide ? firstSlide.getBoundingClientRect().width + gap : 340;
+        const dir = btn.dataset.dir === 'prev' ? -1 : 1;
+        target.scrollBy({ left: amount * dir, behavior: 'smooth' });
+      });
+    });
+
+    document.querySelectorAll('.slider').forEach(slider => {
+      let isDown = false;
+      let startX = 0;
+      let scrollLeft = 0;
+
+      slider.addEventListener('pointerdown', e => {
+        isDown = true;
+        slider.classList.add('dragging');
+        startX = e.pageX;
+        scrollLeft = slider.scrollLeft;
+      });
+
+      slider.addEventListener('pointermove', e => {
+        if (!isDown) return;
+        const walk = (e.pageX - startX) * 1.1;
+        slider.scrollLeft = scrollLeft - walk;
+      });
+
+      const stopDrag = () => {
+        isDown = false;
+        slider.classList.remove('dragging');
+      };
+
+      slider.addEventListener('pointerup', stopDrag);
+      slider.addEventListener('pointerleave', stopDrag);
+      slider.addEventListener('pointercancel', stopDrag);
+    });
+
+    const filterButtons = document.querySelectorAll('.filter-btn');
+    const productSlides = document.querySelectorAll('.product-slide');
+    const productsSlider = document.getElementById('productsSlider');
+
+    filterButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        const filter = button.dataset.filter;
+        filterButtons.forEach(btn => btn.classList.remove('active'));
+        button.classList.add('active');
+
+        productSlides.forEach(slide => {
+          const categories = slide.dataset.category.split(' ');
+          const shouldShow = filter === 'all' || categories.includes(filter);
+          slide.style.display = shouldShow ? '' : 'none';
+        });
+
+        productsSlider.scrollTo({ left: 0, behavior: 'smooth' });
+      });
+    });
+  </script>
+</body>
+</html>
